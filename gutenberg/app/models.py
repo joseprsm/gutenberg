@@ -6,15 +6,16 @@ from gutenberg.app.db import Base
 class User(Base):
 
     __tablename__ = 'users'
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
 
 
 class Prompt(Base):
 
     __tablename__ = 'prompts'
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     item_name = Column(String)
     item_description = Column(String)
+    target_audience = Column(String)
     platform = Column(String)
     user_id = Column(Integer, ForeignKey('users.id'))
 
@@ -22,7 +23,7 @@ class Prompt(Base):
 class Prediction(Base):
 
     __tablename__ = 'predictions'
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     prompt_id = Column(Integer, ForeignKey('prompts.id'))
     text = Column(String)
 
