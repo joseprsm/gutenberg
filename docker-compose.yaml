@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+
+  db:
+    image: postgres
+    container_name: db
+    environment:
+      - POSTGRES_USER=gutenberg
+      - POSTGRES_PASSWORD=gutenberg
+      - POSTGRES_DB=gutenberg
+    expose:
+      - 5432
+
+  backend:
+    build:
+      context: .
+      target: backend
+    container_name: backend
+    depends_on:
+      - db
+    environment:
+      - DB_URL=postgresql://gutenberg:gutenberg@db:5432/gutenberg
+    ports:
+      - "8001:8001"
