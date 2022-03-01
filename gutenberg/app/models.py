@@ -3,6 +3,12 @@ from sqlalchemy import Column, Integer, ForeignKey, String
 from gutenberg.app.db import Base
 
 
+class Users(Base):
+
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+
+
 class Prompt(Base):
 
     __tablename__ = 'prompts'
