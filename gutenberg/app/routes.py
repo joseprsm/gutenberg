@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Any, Dict
 
 import openai
 
@@ -20,28 +20,43 @@ def predict(prompt: schemas.Prompt, db: Session = Depends(get_db)):
         item_name=prompt.item_name,
         item_description=prompt.item_description,
         target_audience=prompt.target_audience,
-        platform=prompt.platform,
-        user_id=prompt.user_id
+        platform=prompt.platform
     )
 
     db.add(db_prompt)
     db.commit()
     db.refresh(db_prompt)
 
-    predictions: List[str] = openai.Completion.create(
+    predictions: List[Dict[str, Any]] = openai.Completion.create(
         engine="text-davinci-001",
-        prompt=prompt.generate(),
-        temperature=0.6, n=1, max_tokens=1000
+        prompt=generate_prompt(
+            prompt.item_name,
+            prompt.item_description,
+            prompt.platform,
+            prompt.target_audience),
+        temperature=0.6, n=5, max_tokens=1000
     ).choices
 
-    for pred_text in predictions:
+    for pred in predictions:
+        pred_text = pred['text']
         db_pred = models.Prediction(prompt_id=db_prompt.id, text=pred_text)
         db.add(db_pred)
         db.commit()
         db.refresh(db_pred)
+
+    return {
+        'choices': [
+            pred['text'] for pred in predictions
+        ]}
 
 
 @router.get('/')
 def get_predictions(db: Session = Depends(get_db), skip: int = 0, limit: int = 20):
     return db.query(models.Prediction).offset(skip).limit(limit).all()
 
+
+def generate_prompt(name, description, platform, target_audience):
+    return f"""
+        Write an ad for the following product to run on {platform} aimed at {target_audience}:
+        Product: {name}. {description}.
+    """

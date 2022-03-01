@@ -3,12 +3,6 @@ from sqlalchemy import Column, Integer, ForeignKey, String
 from gutenberg.app.db import Base
 
 
-class User(Base):
-
-    __tablename__ = 'users'
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-
-
 class Prompt(Base):
 
     __tablename__ = 'prompts'
@@ -17,7 +11,6 @@ class Prompt(Base):
     item_description = Column(String)
     target_audience = Column(String)
     platform = Column(String)
-    user_id = Column(Integer, ForeignKey('users.id'))
 
 
 class Prediction(Base):
