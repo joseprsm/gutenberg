@@ -23,3 +23,13 @@ services:
       - DB_URL=postgresql://gutenberg:gutenberg@db:5432/gutenberg
     ports:
       - "8001:8001"
+
+  frontend:
+    build:
+      context: .
+      target: frontend
+    container_name: frontend
+    depends_on:
+      - backend
+    ports:
+      - "8501:8501"

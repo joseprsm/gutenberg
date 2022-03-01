@@ -16,3 +16,13 @@ COPY setup.cfg setup.cfg
 RUN pip install -e .
 
 CMD python gutenberg/app/main.py
+
+FROM python:3.8-slim-buster AS frontend
+
+COPY gutenberg/app/frontend.py app.py
+
+RUN apt-get update && apt-get -y install gcc
+
+RUN pip install requests streamlit
+
+CMD streamlit run app.py
