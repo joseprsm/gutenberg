@@ -4,7 +4,7 @@ import os
 import requests
 import streamlit as st
 
-URL = os.environ.get('URL', f'http://localhost:8001')
+URL = os.environ.get('URL', 'http://backend:8001')
 
 st.sidebar.title('Gutenberg 🪶')
 
