@@ -21,6 +21,7 @@ services:
       - db
     environment:
       - DB_URL=postgresql://gutenberg:gutenberg@db:5432/gutenberg
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
     ports:
       - "8001:8001"
 
