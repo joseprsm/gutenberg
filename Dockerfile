@@ -4,6 +4,15 @@ COPY requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt
 
-COPY gutenberg gutenberg
+RUN apt-get update \
+    && apt-get -y install libpq-dev gcc \
+    && pip install psycopg2
 
-CMD python rexify/app/main.py
+COPY gutenberg/app gutenberg/app
+
+COPY setup.py setup.py
+COPY setup.cfg setup.cfg
+
+RUN pip install -e .
+
+CMD python gutenberg/app/main.py
